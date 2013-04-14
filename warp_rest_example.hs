@@ -1,4 +1,7 @@
 {-# LANGUAGE OverloadedStrings, TypeFamilies, DeriveDataTypeable, TemplateHaskell #-}
+
+module Main where
+
 import Web.Scotty
 
 import Data.Default (def)
@@ -6,10 +9,9 @@ import Data.Typeable
 import qualified Data.Map as Map
 
 -- Network
-import Network.Wai.Middleware.RequestLogger
 import Network.Wai.Middleware.Static
 import Network.Wai.Handler.Warp (settingsPort)
-import Network.HTTP.Types  (status404, status200, status201)
+import Network.HTTP.Types  (status404, status200)
 
 -- Database
 import Data.Acid
@@ -19,7 +21,7 @@ import Control.Monad.Reader (ask)
 import Control.Monad.IO.Class (liftIO)
 
 import qualified Control.Monad.State as S
-import Control.Lens (makeLenses, view, over)
+import Control.Lens (makeLenses)
 
 ------------------------------------------------------------------------------
 
@@ -91,14 +93,14 @@ main = do
                Nothing    -> status status404
                Just value -> json value
 
-        get "/delete/:key" $ do
+        delete "/delete/:key" $ do
             key <- param "key"
-            liftIO $ update database (DeleteKey key)
+            _   <- liftIO $ update database (DeleteKey key)
             status status200
 
         post "/update/" $ do
             (key, val) <- jsonData
-            liftIO $ update database (InsertKey key val)
+            _          <- liftIO $ update database (InsertKey key val)
             status status200
 
 ------------------------------------------------------------------------------
