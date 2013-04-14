@@ -14,4 +14,4 @@ cabal-version:       >=1.8
 
 executable haskell-warp-rest
   main-is: warp_rest_example.hs
-  build-depends: base ==4.6.*, acid-state, lens, scotty, wai-middleware-static
+  build-depends: base ==4.6.*, acid-state, lens, scotty, wai-middleware-static, mtl, transformers, containers, safecopy, http-types, warp, data-default
